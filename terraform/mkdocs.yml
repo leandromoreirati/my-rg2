@@ -1,0 +1,19 @@
+site_name: Azure Resource Group
+docs_dir: docs
+plugins:
+  - techdocs-core
+  - mkdocs-video
+
+#sidebar navigation
+nav:
+  - Overview:
+    - What is Azure Resource Group?: 'index.md'
+  - Infrastructure Pipeline:
+    - Getting Started: 'getting-started.md'
+    - Atlantis:
+      - What is Atlantis?: 'what-is-atlantis.md'
+      - How to Use: 'how-to-use-atlantis.md'
+  - Variables Available: 'variable.md'
+  - Module Documentation: https://github.com/leandromoreirati/tf-module-azure-resource-group/blob/main/README.md
+  - How To Video: "how-to-video.md"
+
