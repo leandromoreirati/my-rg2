@@ -1,0 +1,11 @@
+version: 3
+projects:
+  #- dir: .
+  - name: staging
+    dir: terraform/
+    workspace: staging
+    workflow: staging
+    #allowed_overrides: staging
+    autoplan:
+      when_modified: ["**/*"]
+    terraform_version: v1.4.6

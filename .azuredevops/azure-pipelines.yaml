@@ -1,0 +1,60 @@
+name: $(BuildDefinitionName)_$(date:yyyyMMdd)$(rev:.r).[${{parameters.action}}].[${{parameters.environment}}]
+
+trigger:
+  branches: # Branch names to include or exclude for triggering a run.
+    include:
+    - main
+  paths: 
+    exclude:
+    - CHANGELOG.md
+    - ./.azuredevops/azure-pipelines.yml
+
+pool: 
+  name: $(AGENT_POOL)
+
+parameters:
+
+- name: environment
+  displayName: Environment
+  type: string
+  default: staging
+  values:
+  - staging
+  - test
+  - prod
+
+- name: action
+  displayName: Action
+  type: string
+  default: plan
+  values:
+  - plan
+  - apply
+  - destroy
+
+- name: terraformVersion
+  displayName: Terraform Version
+  type: string
+  default: '1.3.5'
+
+resources: 
+  repositories:
+  - repository: pipeline
+    name: devops/pipeline
+    type: git
+    ref: refs/heads/main
+  - repository: tools
+    name: devops/tools
+    type: git
+    ref: refs/heads/main
+  - repository: built
+    type: github
+    endpoint: gh_leandromoreirati-Iac
+    name: leandromoreirati/built-library
+
+extends:
+  template: ./workflows/iac/terraform.yaml@pipeline
+  parameters:
+    terraformVersion: ${{ parameters.terraformVersion }}
+    environment: ${{ parameters.environment }}
+    action: ${{ parameters.action }}

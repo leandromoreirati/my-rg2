@@ -1,0 +1,40 @@
+run-name: '[$(Date:yyyyMMdd)$(Rev:.r)] [${{ inputs.action }}][${{ inputs.environment }}]'
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        required: true
+        description: 'Terraform Action'
+        default: 'plan'
+        type: choice
+        options:
+          - plan
+          - deploy
+          - destroy
+      terraform_version:
+        required: true
+        description: 'Terraform Version'
+        default: '1.5.0'
+        type: string
+      environment:
+        required: true
+        description: 'Pipeline Environment'
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - dev
+          - prod
+
+jobs:
+  terraform:
+    uses: leandromoreirati/github-workflow/.github/workflows/terraform.yaml@main
+    with:
+      terraform_version: ${{ github.event.inputs.terraform_version }}
+      environment: ${{ github.event.inputs.environment }}
+      runs-on: 'ubuntu-latest'
+      action: ${{ github.event.inputs.action }}
+    secrets: inherit
+    permissions:
+      contents: read
